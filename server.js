@@ -17,14 +17,14 @@ app.post('/send-email', (req, res) => {
         port: 465,
         secure: true, // Используем SSL
         auth: {
-            user: 'bathedultrapro@yandex.ru',
-            pass: 'fsfsrguwqwyubext',
+            user: 'klllnolse@yandex.ru',
+            pass: 'qfpcguitaewtklbp',
         },
     });
 
     const mailOptions = {
-        from: 'bathedultrapro@yandex.ru', // Используем ваш email для отправки
-        to: 'bathedultrapro@yandex.ru', // Ваш email для получения
+        from: 'klllnolse@yandex.ru', // Используем ваш email для отправки
+        to: 'klllnolse@yandex.ru', // Ваш email для получения
         subject: `Feedback from ${name}`,
         text: `Name: ${name}\nPhone: ${phone}\nEmail: ${email}\nComment: ${comment}`
     };

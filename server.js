@@ -2,9 +2,21 @@ const express = require('express');
 const nodemailer = require('nodemailer');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const https = require('https');
+const fs = require('fs');
 
 const app = express();
 const port = process.env.PORT || 8080;
+
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/klllnolse.ru/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/klllnolse.ru/cert.pem', 'utf8');
+const ca = fs.readFileSync('/etc/letsencrypt/live/klllnolse.ru/chain.pem', 'utf8');
+
+const credentials = {
+    key: privateKey,
+    cert: certificate,
+    ca: ca
+};
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -38,6 +50,17 @@ app.post('/send-email', (req, res) => {
     });
 });
 
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+const httpsServer = https.createServer(credentials, app);
+
+httpsServer.listen(port, () => {
+    console.log(`HTTPS Server running on port ${port}`);
+});
+
+// Важно также запустить HTTP сервер для редиректа на HTTPS
+const http = require('http');
+http.createServer((req, res) => {
+    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
+    res.end();
+}).listen(80, () => {
+    console.log('HTTP Server running on port 80');
 });

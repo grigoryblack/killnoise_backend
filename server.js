@@ -55,12 +55,3 @@ const httpsServer = https.createServer(credentials, app);
 httpsServer.listen(port, () => {
     console.log(`HTTPS Server running on port ${port}`);
 });
-
-// Важно также запустить HTTP сервер для редиректа на HTTPS
-const http = require('http');
-http.createServer((req, res) => {
-    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
-    res.end();
-}).listen(8080, () => {
-    console.log('HTTP Server running on port 8080');
-});
